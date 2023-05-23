@@ -101,9 +101,15 @@ class HomeController extends Controller
             $outcome = "created";
         }
 
+        if($request->email==""){
+            $email=str_replace(' ', '', str_replace(',', '', $request->name))."@accessmadelimited.com";
+        }else{
+            $email = $request->email;
+        }
+
         User::updateOrCreate(['id'=>$request->cid],[
             'name'=>$request->name,
-            'email'=>$request->email,
+            'email'=>$email,
             'password'=>Hash::make($request->password),
             'about'=>$request->about,
             'phone_number'=>$request->phone_number,
