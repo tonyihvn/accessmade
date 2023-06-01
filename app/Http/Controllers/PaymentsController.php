@@ -127,7 +127,8 @@ class PaymentsController extends Controller
     public function uploadPayments(Request $request)
     {
             // Excel::import(new UsersImport, $request->file('filename'));
-
+                $nomatch="";
+                $duplicates="";
                 if ($request->file_name != null ){
 
                   $file = $request->file('file_name');
@@ -187,24 +188,34 @@ class PaymentsController extends Controller
 
                         $client_id = User::select('id')->where('ippis_no',$importData[1])->first();
 
+                        if(!isset($client_id)){
+                            $nomatch .=$importData[1]." IPPIS No, not Found <br>";
+                        }
+
                         if(isset($client_id->id)){
                             $subscription = subscriptions::select('id','product_id')->where('client_id',$client_id->id)->where('status','!=','Merged')->first();
 
-                            $payment = payments::Create([
-                                'client_id'=>$client_id->id,
-                                'product_id'=>19,
-                                'amount_paid'=>$importData[2],
-                                'payment_date'=>$request->date_paid,
-                                'month'=>$request->month,
-                                'subscription_id'=>$subscription->id,
-                                'remarks'=>$importData[3],
-                                'business_id'=>Auth()->user()->business_id
-                            ]);
+                            $checkInitial = payments::where('client_id',$client_id->id)->where('month',$request->month)->get();
+
+                            if(isset($checkInitial)){
+                                $duplicates .='Duplicate Entry for IPPIS NO: '.$importData[1]." for Month of ".date('F', mktime(0, 0, 0, $request->month, 10))."<br>";
+                            }else{
+                                $payment = payments::Create([
+                                    'client_id'=>$client_id->id,
+                                    'product_id'=>19,
+                                    'amount_paid'=>$importData[2],
+                                    'payment_date'=>$request->date_paid,
+                                    'month'=>$request->month,
+                                    'subscription_id'=>$subscription->id,
+                                    'remarks'=>$importData[3],
+                                    'business_id'=>Auth()->user()->business_id
+                                ]);
+                            }
                         }
 
                       }
 
-                      $message = 'Import  was Successful.';
+                      $message = 'Import  was Successful.<br>'.$nomatch.$duplicates;
                     }else{
                       $message = 'File too large. File must be less than 2MB.';
                     }

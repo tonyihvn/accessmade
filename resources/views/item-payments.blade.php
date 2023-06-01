@@ -33,7 +33,7 @@
                     <thead>
                         <tr style="color: ">
                             <th>Client</th>
-                            <th>Date</th>
+                            <th>Month</th>
                             <th>Subscription-Plan</th>
                             <th>Amount</th>
 
@@ -43,7 +43,7 @@
                         @foreach ($payments as $sub)
                             <tr>
                                 <td>{{ $sub->client->name }}</td>
-                                <td>{{ $sub->payment_date }}</td>
+                                <td>{{ date('F', mktime(0, 0, 0, $sub->month, 10)) }}</td>
                                 <td>{{ $sub->subscription->subplan->title }}</td>
                                 <td>{{ $sub->amount_paid }}</td>
 

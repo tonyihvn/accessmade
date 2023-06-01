@@ -32,6 +32,7 @@
                         <th>Organization</th>
                         <th>Category</th>
                         <th>Contact Person</th>
+                        <th>IPPIS No</th>
                         <th>Phone Number</th>
                         <th>All Subscriptions</th>
                         <th>Running</th>
@@ -45,6 +46,7 @@
                             <td>{{ $cl->company_name }}</td>
                             <td>{{ $cl->category }}</td>
                             <td>{{ $cl->name }}</td>
+                            <td>{{ $cl->ippis_no }}</td>
                             <td>{{ $cl->phone_number }}</td>
                             <td>{{ $cl->subscriptions->count() }}</td>
                             <td>{{ isset($cl->subscriptions->where('status', 'Open')->first()->title) ?? 'None' }}
@@ -58,16 +60,11 @@
 
                                     <a href="{{ url('/delete-client/' . $cl->id) }}" class="btn btn-danger btn-xs"
                                         onclick="if (! confirm('Are you sure you want to delete this user??')) { return false; }">Del</a>
-
-
-
                                 </div>
                             </td>
 
                         </tr>
                     @endforeach
-
-
                 </tbody>
             </table>
         </div>

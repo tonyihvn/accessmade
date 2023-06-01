@@ -34,13 +34,13 @@
                     <table class="table  responsive-table" id="products" style="font-size: 0.9em !important;">
                         <thead>
                             <tr style="color: ">
-                                <th>Select</th>
+                                <th style="width: 2% !important;">Select</th>
                                 <th>Client</th>
                                 <th>Product</th>
                                 <th>Date Subscribed</th>
                                 <th>Subscription-Plan</th>
                                 <th>Payments-Made</th>
-                                <th>Penalty</th>
+                                <th>Balance</th>
                                 <th>My Payments</th>
 
                             </tr>
@@ -53,8 +53,9 @@
                                     <td>{{ $sub->client->name }}</td>
                                     <td>{{ $sub->product->title ?? 'Merged' }}</td>
                                     <td>{{ $sub->date_subscribed }}</td>
-                                    <td>{{ $sub->subplan->title }}</td>
-                                    <td>{{ $sub->payments->count() }} times (Total: {{ $sub->payments->sum('amount_paid') }}
+                                    <td><small>{{ $sub->subplan->title }}</small></td>
+                                    <td>{{ $sub->payments->count() }} times (Total Paid:
+                                        {{ $sub->payments->sum('amount_paid') }}
                                         )
                                         @if ($sub->subplan->duration <= $sub->payments->count())
                                             <div class="badge badge-success">Completed</div>
@@ -62,7 +63,7 @@
                                             <div class="badge badge-warning">Not Completed</div>
                                         @endif
                                     </td>
-                                    <td>{{ $sub->penalties }}</td>
+                                    <td>{{ $sub->subplan->price - $sub->payments->sum('amount_paid') }}</td>
                                     <td>
                                         @if ($sub->status == 'Merged')
                                             Merged
@@ -105,7 +106,9 @@
                         </div>
                         <div class="form-group col-md-6">
 
-                            <button type="submit" class="btn btn-primary  float-right">Merge/TopUp Selected</button>
+                            <button type="submit" class="btn btn-primary float-right"
+                                onclick="return confirm('Please verify the items you are merging. Is it ok?')">Merge/TopUp
+                                Selected</button>
                         </div>
                     </div>
 

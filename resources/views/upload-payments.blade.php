@@ -50,7 +50,7 @@
 
                     <div class="col-md-4">
                         <label>Select Month</label>
-                        <select name="month" class="form-control">
+                        <select name="month" class="form-control" id="month">
                             <option value="1">January</option>
                             <option value="2">February</option>
                             <option value="3">March</option>
@@ -81,7 +81,8 @@
 
                 <div class="row">
                     <div class="col-md-12">
-                        <button type="submit" name="submit" class="btn btn-primary float-right">Upload</button>
+                        <button type="submit" name="submit" class="btn btn-primary float-right"
+                            onclick="return confirm('Please re-cconfirm the month of payment, is it correct?'+document.getElementById('month').text)">Upload</button>
                     </div>
                 </div>
 

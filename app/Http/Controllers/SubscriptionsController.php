@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\subscriptions;
 use App\Models\subscription_plans;
+use App\Models\interests;
 use Illuminate\Http\Request;
 
 class SubscriptionsController extends Controller
@@ -46,9 +47,10 @@ class SubscriptionsController extends Controller
         $allInterestRates = array();
         $allDuration = array();
         $newProduct = '';
+        $interestTable = interests::select('months','percentage')->get();
 
         $priceGrandTotalAmount = 0;
-
+        $interestToAdd = 0;
         foreach($request->topup as $subid){
 
             $subscription = subscriptions::find($subid);
@@ -66,7 +68,33 @@ class SubscriptionsController extends Controller
             $subsTotalPaid = $subscription->payments->sum('amount_paid');
 
             $subsBal = $subsTotalAmount - $subsTotalPaid;
+
+            // Get Extra Interest
+            $durationLeft = $subscription->subplan->duration - $subscription->payments->count();
+
+            if($durationLeft==$subscription->subplan->duration){
+                $interestToAdd=0;
+            }elseif($durationLeft<=3){
+                $interestToAdd = $interestTable->where('months',3)->first()->percentage;
+            }elseif($durationLeft<=6){
+                $interestToAdd = $interestTable->where('months',6)->first()->percentage;
+            }elseif($durationLeft<=9){
+                $interestToAdd = $interestTable->where('months',9)->first()->percentage;
+            }elseif($durationLeft<=12){
+                $interestToAdd = $interestTable->where('months',12)->first()->percentage;
+            }elseif($durationLeft<=15){
+                $interestToAdd = $interestTable->where('months',15)->first()->percentage;
+            }elseif($durationLeft<=18){
+                $interestToAdd = $interestTable->where('months',18)->first()->percentage;
+            }elseif($durationLeft<=24){
+                $interestToAdd = $interestTable->where('months',24)->first()->percentage;
+            }
+
             $grandTotalAmount+=$subsBal;
+
+            $oldInterest = ($grandTotalAmount*$interestToAdd)/100;
+
+            $grandTotalAmount+=($oldInterest*$durationLeft);
 
             $subsInterest = $subscription->subplan->percentage_increase;
             array_push($allInterestRates, $subsInterest);
@@ -107,7 +135,7 @@ class SubscriptionsController extends Controller
             'status'=>$request->status,
             'business_id'=>Auth()->user()->business_id
         ]);
-        $message = 'The Subscriptions was successful toped-Up / Merged!';
+        $message = 'The Subscriptions was successful toped-Up / Merged! Duration Left: '.$durationLeft;
 
         return redirect()->back()->with(['message'=>$message]);
     }
