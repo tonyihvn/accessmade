@@ -422,6 +422,21 @@
                                         <p>Categories</p>
                                     </a>
                                 </li>
+                                <li class="nav-item">
+                                    <a href="{{ url('communications') }}" class="nav-link">
+                                        <i class="far fa-envelope nav-icon"></i>
+                                        <p>Communication</p>
+                                    </a>
+
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ url('sentmessages') }}" class="nav-link">
+                                        <i class="far fa-envelope nav-icon"></i>
+                                        <p>Sent Messages</p>
+                                    </a>
+
+                                </li>
+
 
 
 
@@ -682,33 +697,6 @@
             $("#merged").show();
         });
 
-        function material(accid) {
-
-            var name = $('#ach' + accid).attr("data-name");
-            var type = $('#ach' + accid).attr("data-type");
-            var measurement_unit = $('#ach' + accid).attr("data-measurement_unit");
-            var size = $('#ach' + accid).attr("data-size");
-            var picture = $('#ach' + accid).attr("data-picture");
-
-            var cost_per = $('#ach' + accid).attr("data-cost_per");
-            var business_id = $('#ach' + accid).attr("data-business_id");
-            var category = $('#ach' + accid).attr("data-category");
-
-            $('#id').val(accid);
-            $('#name').val(name);
-            $('#type').val(type).attr("selected", "selected");
-            $('#measurement_unit').val(measurement_unit);
-            $('#size').val(size);
-
-
-
-            $('#cost_per').val(cost_per);
-            $('#oldpicture').val(picture);
-            $('#category').val(category).attr("selected", "selected");
-            $('#business_id').val(business_id).attr("selected", "selected");
-            $('#matbutton').html("Update Material");
-
-        }
 
         function supplier(accid) {
 
@@ -729,45 +717,6 @@
             $('#category').val(category).attr("selected", "selected").change();
             $('#business_id').val(business_id).attr("selected", "selected").change();
             $('#supbutton').html("Update Supplier");
-
-        }
-
-        function materialcheckout(accid) {
-
-            $("#forcheckout").show();
-
-            $("#materiallist").hide();
-
-            var material_name = $('#ach' + accid).attr("data-material_name");
-
-            $("#material_named").text(material_name).change();
-
-            $("#quantity").attr('type', 'number').change();
-
-            var checkout_by = $('#ach' + accid).attr("data-checkout_by");
-            var approved_by = $('#ach' + accid).attr("data-approved_by");
-            var task_id = $('#ach' + accid).attr("data-task_id");
-
-            var material_id = $('#ach' + accid).attr("data-material_id");
-            var quantity = $('#ach' + accid).attr("data-quantity");
-            var business_id = $('#ach' + accid).attr("data-business_id");
-            var dated = $('#ach' + accid).attr("data-dated");
-            var details = $('#ach' + accid).attr("data-details");
-
-            var date_supplied = $('#ach' + accid).attr("data-date_supplied");
-
-
-            $('#id').val(accid);
-            $('#task_id').val(task_id).attr("selected", "selected").change();
-            $('#checkout_by').val(checkout_by).attr("selected", "selected").change();
-            $('#material_id').val(material_id).attr("selected", "selected").change();
-            $('#quantity').val(quantity);
-            $('#dated').val(dated);
-            $('#details').val(details);
-            $('#approved_by').val(approved_by).attr("selected", "selected").change();
-
-            $('#business_id').val(business_id).attr("selected", "selected").change();
-            $('#mtcbutton').html("Update Checkout");
 
         }
 
@@ -903,6 +852,79 @@
             $("#" + item_id).remove();
             $("#itrow2" + item_id).remove();
 
+        });
+
+        function addnumber(number) {
+            var receivers = $('#recipients').val();
+
+            if (number == "all") {
+
+                if (receivers == "") {
+                    $('#recipients').val($('#all').attr('data-allnumbers'));
+                } else {
+                    $('#recipients').val('');
+                }
+
+
+            } else {
+                if ($("#recipients").val().indexOf(',' + number) >= 0) {
+
+
+
+                    $('#recipients').val(receivers.replace(',' + number, ''));
+
+                } else if ($("#recipients").val().indexOf(number + ',') >= 0) {
+
+
+                    $('#recipients').val(receivers.replace(number + ',', ''));
+
+                } else if ($("#recipients").val().indexOf(number) >= 0) {
+
+
+                    $('#recipients').val(receivers.replace(number, ''));
+
+                } else {
+                    if (receivers == "") {
+
+                        $('#recipients').val(number);
+                    } else {
+                        $('#recipients').val(receivers + ',' + number);
+                    }
+
+                }
+            }
+
+        }
+
+        // CHECK ALL
+        $('#all').click(function(event) {
+            if (this.checked) {
+                // Iterate each checkbox
+                $(':checkbox').each(function() {
+                    this.checked = true;
+                });
+            } else {
+                $(':checkbox').each(function() {
+                    this.checked = false;
+                });
+            }
+        });
+
+        // TEXT AREA Counter
+        $('#body').on("input", function() {
+            var maxlength = $(this).attr("maxlength");
+            var currentLength = $(this).val().length;
+
+            $("#charcounter").text(currentLength + " characters");
+            $("#pagecounter").text(Math.ceil(currentLength / 160) + " pages");
+
+
+            if (currentLength >= maxlength) {
+                $("#error").text("You have reached the maximum number of characters.");
+            } else {
+                $("#charleft").text(maxlength - currentLength + " chars left");
+
+            }
         });
     </script>
 

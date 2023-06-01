@@ -162,6 +162,117 @@ class HomeController extends Controller
         return view('new-client')->with(['client'=>$client,'categories'=>$categories,'object'=>$object]);
     }
 
+
+    public function communications()
+    {
+      $response = null;
+      // system("ping -c 1 google.com", $response);
+      if(!checkdnsrr('google.com'))
+      {
+          return redirect()->back()->with(['message'=>'Please connect your internect before going to communications page <a href="/communications">Retry</a>']);
+      }else{
+
+
+
+        $session = file_get_contents("http://www.smslive247.com/http/index.aspx?cmd=login&owneremail=gcictng@gmail.com&subacct=CRMAPP&subacctpwd=@@prayer22");
+        $sessionid = ltrim(substr($session,3),' ');
+
+        \Cookie::queue('sessionidd', $sessionid, 30);
+
+        $cbal = file_get_contents("http://www.smslive247.com/http/index.aspx?cmd=querybalance&sessionid=".$sessionid);
+
+        $creditbalance = ltrim(substr($cbal,3),' ');
+
+
+        $allclients = User::select('id','phone_number','company_name','category','name','role')->get();
+
+        $allnumbers = "";
+        $lastrecord = end($allclients);
+
+        // $lastkey = key($lastrecord);
+
+        foreach($allclients as $key => $mnumber){
+          $number = $mnumber->phone_number;
+          if($number==""){
+            continue;
+          }
+
+          if(substr($number,0,1)=="0"){
+            $number="234".ltrim($number,'0');
+          }
+
+          $allnumbers.=$number.",";
+
+        }
+        $allnumbers = substr($allnumbers,0,-1);
+
+        return view('communication', compact('allclients','allnumbers','creditbalance'));
+      }
+    }
+
+    public function sendSMS(request $request){
+
+      // 2 Jan 2008 6:30 PM   sendtime - date format for scheduling
+      if(\Cookie::get('sessionidd')){
+        $sessionid = \Cookie::get('sessionidd');
+      }else{
+        $session = file_get_contents("http://www.smslive247.com/http/index.aspx?cmd=login&owneremail=gcictng@gmail.com&subacct=CRMAPP&subacctpwd=@@prayer22");
+        $sessionid = ltrim(substr($session,3),' ');
+      }
+
+      $sessionid = \Cookie::get('sessionidd');
+      $recipients = $request->recipients;
+      $body = $request->body;
+
+
+      $message = file_get_contents("http://www.smslive247.com/http/index.aspx?cmd=sendmsg&sessionid=".$sessionid."&message=".urlencode($body)."&sender=INFO&sendto=".$recipients."&msgtype=0");
+
+
+      // v20ylRY3Gp6jYEAvpaDtOQQTqwoCqc1n4CUG3IBboIMTciDeVk	  -  Token for smartsms solutions
+
+      $allclients = User::select('id','phone_number','company_name','category','name','role')->get();
+      $allnumbers = "";
+      $lastrecord = end($allclients);
+      $lastkey = key($lastrecord);
+
+      foreach($allclients as $key => $mnumber){
+        $number = $mnumber->phone_number;
+        if($number=="")
+          continue;
+
+        if(substr($number,0,1)=="0")
+          $number="234".ltrim($number,'0');
+
+        $allnumbers.=$number.",";
+
+      }
+      // GET CREDIT BALANCE
+      $cbal = file_get_contents("http://www.smslive247.com/http/index.aspx?cmd=querybalance&sessionid=".$sessionid);
+
+      $creditbalance = ltrim(substr($cbal,3),' ');
+
+      $allnumbers = substr($allnumbers,0,-1);
+
+      return view('communication', compact('allclients','allnumbers','message','creditbalance'));
+
+
+    }
+
+    public function sentSMS(request $request){
+
+      if(\Cookie::get('sessionidd')){
+        $sessionid = \Cookie::get('sessionidd');
+      }else{
+        $session = file_get_contents("http://www.smslive247.com/http/index.aspx?cmd=login&owneremail=gcictng@gmail.com&subacct=CRMAPP&subacctpwd=@@prayer22");
+        $sessionid = ltrim(substr($session,3),' ');
+      }
+
+      $sentmessages = file_get_contents("http://www.smslive247.com/http/index.aspx?cmd=getsentmsgs&sessionid=".$sessionid."&pagesize=200&pagenumber=1&begindate=".urlencode('06 Sep 2021')."&enddate=".urlencode('08 Sep 2021')."&sender=CHURCH");
+      error_log("All SENT: ".$sentmessages);
+      return view('sentmessages', compact('sentmessages'));
+    }
+
+
     public function settings(request $request){
         $validateData = $request->validate([
             'logo'=>'image|mimes:jpg,png,jpeg,gif,svg',
