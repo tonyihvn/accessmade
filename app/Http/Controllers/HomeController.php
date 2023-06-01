@@ -233,7 +233,7 @@ class HomeController extends Controller
       $allclients = User::select('id','phone_number','company_name','category','name','role')->get();
       $allnumbers = "";
       $lastrecord = end($allclients);
-      $lastkey = key($lastrecord);
+      // $lastkey = key($lastrecord);
 
       foreach($allclients as $key => $mnumber){
         $number = $mnumber->phone_number;
