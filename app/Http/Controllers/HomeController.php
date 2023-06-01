@@ -225,7 +225,7 @@ class HomeController extends Controller
       $body = $request->body;
 
 
-      $message = file_get_contents("http://www.smslive247.com/http/index.aspx?cmd=sendmsg&sessionid=".$sessionid."&message=".urlencode($body)."&sender=INFO&sendto=".$recipients."&msgtype=0");
+      $message = file_get_contents("http://www.smslive247.com/http/index.aspx?cmd=sendmsg&sessionid=".$sessionid."&message=".urlencode($body)."&sender=READ&sendto=".$recipients."&msgtype=0");
 
 
       // v20ylRY3Gp6jYEAvpaDtOQQTqwoCqc1n4CUG3IBboIMTciDeVk	  -  Token for smartsms solutions
