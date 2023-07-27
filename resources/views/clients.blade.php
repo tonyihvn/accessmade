@@ -34,8 +34,6 @@
                         <th>Contact Person</th>
                         <th>IPPIS No</th>
                         <th>Phone Number</th>
-                        <th>All Subscriptions</th>
-                        <th>Running</th>
                         <th>Action</th>
                     </tr>
                 </thead>
