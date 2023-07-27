@@ -43,7 +43,7 @@ class HomeController extends Controller
 
     public function clients()
     {
-        $allclients = User::select('id','company_name','category','name','ippis_no','phone_number')->where('role','Client')->get();
+        $allclients = User::select('id','company_name','category','name','ippis_no','phone_number','account_manager','state')->where('role','Client')->get();
         // $allclients = User::where('role','Client')->paginate(100);
         return view('clients')->with(['allclients'=>$allclients]);
     }

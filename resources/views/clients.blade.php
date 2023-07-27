@@ -34,6 +34,7 @@
                         <th>Contact Person</th>
                         <th>IPPIS No</th>
                         <th>Phone Number</th>
+                        <th>Acc. Officer</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -46,7 +47,7 @@
                             <td>{{ $cl->name }}</td>
                             <td><small>{{ strtoupper($cl->ippis_no) }}</small></td>
                             <td>{{ $cl->phone_number }}</td>
-
+                            <td><small>{{ $cl->account_manager }}</small><br><small>{{ $cl->state }}</small></td>
                             <td width="90">
                                 <div class="btn-group">
                                     <a href="{{ url('/edit-client/' . $cl->id) }}" class="btn btn-default btn-xs">Edit</a>
