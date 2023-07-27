@@ -41,7 +41,9 @@ class User extends Authenticatable  implements MustVerifyEmail
             'kin_name',
             'kin_address',
             'salary_account',
-            'bank'
+            'bank',
+            'account_manager',
+            'state'
     ];
 
     /**
