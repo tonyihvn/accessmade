@@ -41,10 +41,10 @@
                     @foreach ($allclients as $cl)
                         <tr @if ($cl->status == 'Active') style="background-color: azure !important;" @endif>
                             <td>{{ $cl->id }}</td>
-                            <td>{{ $cl->company_name }}</td>
-                            <td>{{ $cl->category }}</td>
+                            <td><small>{{ strtoupper($cl->company_name) }}</small></td>
+                            <td><small>{{ $cl->category }}</small></td>
                             <td>{{ $cl->name }}</td>
-                            <td>{{ $cl->ippis_no }}</td>
+                            <td><small>{{ strtoupper($cl->ippis_no) }}</small></td>
                             <td>{{ $cl->phone_number }}</td>
 
                             <td width="90">
