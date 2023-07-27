@@ -43,7 +43,8 @@ class HomeController extends Controller
 
     public function clients()
     {
-        $allclients = User::where('role','Client')->paginate(100);
+        $allclients = User::select('id','company_name','category','name','ippis_no','phone_number')->where('role','Client')->get();
+        // $allclients = User::where('role','Client')->paginate(100);
         return view('clients')->with(['allclients'=>$allclients]);
     }
 
@@ -55,7 +56,7 @@ class HomeController extends Controller
 
     public function Contributors()
     {
-        $allclients = User::where('role','Contributor')->paginate(100);
+        $allclients = User::select('status','phone_number','address','about','category','about','id')->where('role','Contributor')->get();
         return view('contributors')->with(['allclients'=>$allclients,'object'=>'Contributors']);
     }
 

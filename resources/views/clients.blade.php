@@ -48,15 +48,13 @@
                             <td>{{ $cl->name }}</td>
                             <td>{{ $cl->ippis_no }}</td>
                             <td>{{ $cl->phone_number }}</td>
-                            <td>{{ $cl->subscriptions->count() }}</td>
-                            <td>{{ isset($cl->subscriptions->where('status', 'Open')->first()->title) ?? 'None' }}
-                            </td>
+
                             <td width="90">
                                 <div class="btn-group">
                                     <a href="{{ url('/edit-client/' . $cl->id) }}" class="btn btn-default btn-xs">Edit</a>
 
                                     <a href="{{ url('/client-subscriptions/' . $cl->id) }}"
-                                        class="btn btn-success btn-xs">Subcriptions</a>
+                                        class="btn btn-success btn-xs">Subs.</a>
 
                                     <a href="{{ url('/delete-client/' . $cl->id) }}" class="btn btn-danger btn-xs"
                                         onclick="if (! confirm('Are you sure you want to delete this user??')) { return false; }">Del</a>
@@ -68,7 +66,6 @@
 
                 </tbody>
             </table>
-            <div class="col-md-6 col-md-offset-3">{{$allclients->links()}}</div>
         </div>
     </div>
 @endsection
