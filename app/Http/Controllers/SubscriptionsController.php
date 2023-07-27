@@ -16,7 +16,7 @@ class SubscriptionsController extends Controller
      */
     public function index()
     {
-        $subscriptions = subscriptions::all();
+        $subscriptions = subscriptions::paginate(100);
         return view('product_subscriptions')->with(['subscriptions'=>$subscriptions]);
     }
 

@@ -1,13 +1,13 @@
 @extends('layouts.template')
 @php
     $pagetype = 'Table';
-    
+
     if (stripos($_SERVER['REQUEST_URI'], 'client') !== false) {
         $cli = 'for ' . $subscriptions[0]->client->name;
     } else {
         $cli = '';
     }
-    
+
 @endphp
 @section('content')
     <div class="content-header">
@@ -86,6 +86,7 @@
 
                     </tbody>
                 </table>
+                <div class="col-md-6 col-md-offset-3">{{$subscriptions->links()}}</div>
             </div>
         </div>
 

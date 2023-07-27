@@ -65,8 +65,10 @@
 
                         </tr>
                     @endforeach
+
                 </tbody>
             </table>
+            <div class="col-md-6 col-md-offset-3">{{$allclients->links()}}</div>
         </div>
     </div>
 @endsection
