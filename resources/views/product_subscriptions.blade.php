@@ -86,7 +86,6 @@
 
                     </tbody>
                 </table>
-                <div class="col-md-6 col-md-offset-3">{{$subscriptions->links()}}</div>
             </div>
         </div>
 
