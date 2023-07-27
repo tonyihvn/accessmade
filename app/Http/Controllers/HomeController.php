@@ -131,6 +131,8 @@ class HomeController extends Controller
 
             'category'=>$request->category,
             'address'=>$request->address,
+            'state'=>$request->state,
+            'account_manager'=>$request->account_manager,
             'role'=>$request->role,
             'status'=>$request->status,
             'business_id'=>Auth()->user()->business_id,

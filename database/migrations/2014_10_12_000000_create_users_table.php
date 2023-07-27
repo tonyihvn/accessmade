@@ -39,6 +39,10 @@ class CreateUsersTable extends Migration
 
             $table->string('category',30)->nullable();
             $table->string('address')->nullable();
+
+            $table->string('state',30)->nullable();
+            $table->string('account_manager',50)->nullable();
+
             $table->string('business_id')->nullable();
             $table->string('role')->nullable();
             $table->string('status')->nullable();

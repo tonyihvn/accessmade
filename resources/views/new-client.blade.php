@@ -5,7 +5,7 @@
 @endif
 @extends($layout)
 @php
-    
+
     if (isset($client->id)) {
         $type = 'Edit';
         $password_action = 'Change';
@@ -14,7 +14,7 @@
     } else {
         $cid = 0;
         // $client = (object) [];
-    
+
         $type = 'New';
         $password_action = '';
         $button = 'Save New ' . $object;
@@ -236,6 +236,28 @@
                         <label for="password">{{ $password_action }} Password</label>
                         <input type="text" class="form-control" name="password" id="password"
                             placeholder="{{ $type }} Password for the  {{ $object }}">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label for="account_manager">Account Manager/Officer</label>
+                        <input type="text" class="form-control" name="account_manager" id="account_manager"
+                            placeholder="Name of Account Officer"
+                            value="{{ isset($client->account_manager) ? $client->account_manager : '' }}">
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="state">State</label>
+                        <select name="state" id="state" class="form-control">
+                            <option value="{{ isset($client->state) ? $client->state : '' }}" selected>
+                                {{ isset($client->state) ? $client->state : 'Select state' }}</option>
+
+                                <option value="FCT">FCT</option>
+                                <option value="Plataeu">Plataeu State</option>
+                                <option value="Nasarawa">Nasarawa State</option>
+                                <option value="Benue">Benue State</option>
+                        </select>
                     </div>
                 </div>
 
