@@ -142,9 +142,9 @@ class HomeController extends Controller
 
         ]);
 
-        $message = 'The '.$request->object.' has been '.$outcome.' successfully';
+        $message = 'The '.$request->object.' has been '.$outcome.' successfully. Please, select product to subscribe';
 
-        return redirect()->back()->with(['message'=>$message]);
+        return redirect()->route('products')->with(['message'=>$message]);
     }
 
     public function editClient($cid)

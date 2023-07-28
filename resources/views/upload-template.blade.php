@@ -31,6 +31,7 @@
                             <th>MBA</th>
                             <th>NAMES</th>
                             <th>IPPIS NUMBER</th>
+                            <th>CATEGORY</th>
                             <th>MONTHLY DED.</th>
                             <th>DURATION</th>
                             <th>START MONTH</th>
@@ -43,17 +44,18 @@
                         @foreach ($subscriptions as $sub)
                             @php
                                 $monthspaid = $sub->payments->count();
-                                
+
                                 $monthsleft = $sub->subplan->duration - $monthspaid;
-                                
+
                                 $endmonth = date('M-Y', strtotime(+$monthsleft . ' months', strtotime(date('M-Y'))));
-                                
+
                             @endphp
                             <tr>
                                 <td>{{ $sn++ }}</td>
                                 <td>{{ $sub->client->company_name }}</td>
                                 <td>{{ $sub->client->name }}</td>
                                 <td>{{ $sub->client->ippis_no }}</td>
+                                <td>{{ $sub->client->category }}</td>
                                 <td>{{ $sub->subplan->monthly_contribution }}</td>
                                 <td>{{ $monthsleft }}</td>
                                 <td>{{ date('M-Y', strtotime($sub->date_subscribed)) }}</td>
