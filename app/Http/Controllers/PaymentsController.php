@@ -186,30 +186,36 @@ class PaymentsController extends Controller
                       foreach($importData_arr as $importData){
 
 
-                        $client_id = User::select('id')->where('ippis_no',$importData[1])->first()->id;
+                        $client_id = User::select('id')->where('ippis_no',$importData[1])->first();
 
-                        if(!isset($client_id)){
+                        if($client_id->isEmpty()){
                             $nomatch .=$importData[1]." IPPIS No, not Found <br>";
-                        }
-
-                        if(isset($client_id->id)){
+                        }else{
                             $subscription = subscriptions::select('id','product_id')->where('client_id',$client_id->id)->where('status','!=','Merged')->first();
 
-                            $checkInitial = payments::where('client_id',$client_id->id)->where('month',$request->month)->get();
 
-                            if(!$checkInitial->isEmpty()){
-                                $duplicates .='Duplicate Entry for IPPIS NO: '.$importData[1]." for Month of ".date('F', mktime(0, 0, 0, $request->month, 10))."<br>";
+                            if(!$subscription->isEmpty()){
+                                $duplicates .='No subscription found for IPPIS NO: '.$importData[1]."<br>";
                             }else{
-                                $payment = payments::Create([
-                                    'client_id'=>$client_id->id,
-                                    'product_id'=>19,
-                                    'amount_paid'=>$importData[2],
-                                    'payment_date'=>$request->date_paid,
-                                    'month'=>$request->month,
-                                    'subscription_id'=>$subscription->id,
-                                    'remarks'=>$importData[3],
-                                    'business_id'=>Auth()->user()->business_id
-                                ]);
+
+                                $checkInitial = payments::where('client_id',$client_id->id)->where('month',$request->month)->get();
+
+
+                                if(!$checkInitial->isEmpty()){
+                                    $duplicates .='Duplicate Entry for IPPIS NO: '.$importData[1]." for Month of ".date('F', mktime(0, 0, 0, $request->month, 10))."<br>";
+                                }else{
+                                    $payment = payments::Create([
+                                        'client_id'=>$client_id->id,
+                                        'product_id'=>19,
+                                        'amount_paid'=>$importData[2],
+                                        'payment_date'=>$request->date_paid,
+                                        'month'=>$request->month,
+                                        'subscription_id'=>$subscription->id,
+                                        'remarks'=>$importData[3],
+                                        'business_id'=>Auth()->user()->business_id
+                                    ]);
+                                }
+
                             }
                         }
 
