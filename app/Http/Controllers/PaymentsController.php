@@ -188,20 +188,20 @@ class PaymentsController extends Controller
 
                         $client_id = User::select('id')->where('ippis_no',$importData[1])->first();
 
-                        if(!$client_id->count()){
+                        if(!isset($client_id->count())){
                             $nomatch .=$importData[1]." IPPIS No, not Found <br>";
                         }else{
                             $subscription = subscriptions::select('id','product_id')->where('client_id',$client_id->id)->where('status','!=','Merged')->first();
 
 
-                            if(!$subscription->count()){
+                            if(!isset($subscription->count())){
                                 $duplicates .='No subscription found for IPPIS NO: '.$importData[1]."<br>";
                             }else{
 
                                 $checkInitial = payments::where('client_id',$client_id->id)->where('month',$request->month)->get();
 
 
-                                if(!$checkInitial->count()){
+                                if(!isset($checkInitial->count())){
                                     $duplicates .='Duplicate Entry for IPPIS NO: '.$importData[1]." for Month of ".date('F', mktime(0, 0, 0, $request->month, 10))."<br>";
                                 }else{
                                     $payment = payments::Create([
