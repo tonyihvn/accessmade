@@ -186,7 +186,7 @@ class PaymentsController extends Controller
                       foreach($importData_arr as $importData){
 
 
-                        $client_id = User::select('id')->where('ippis_no',$importData[1])->first();
+                        $client_id = User::select('id')->where('ippis_no',$importData[1])->first()->id;
 
                         if(!isset($client_id)){
                             $nomatch .=$importData[1]." IPPIS No, not Found <br>";
