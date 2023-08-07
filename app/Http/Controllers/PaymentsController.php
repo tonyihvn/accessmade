@@ -197,7 +197,7 @@ class PaymentsController extends Controller
 
                             $checkInitial = payments::where('client_id',$client_id->id)->where('month',$request->month)->get();
 
-                            if(isset($checkInitial)){
+                            if(!$checkInitial->isEmpty()){
                                 $duplicates .='Duplicate Entry for IPPIS NO: '.$importData[1]." for Month of ".date('F', mktime(0, 0, 0, $request->month, 10))."<br>";
                             }else{
                                 $payment = payments::Create([
