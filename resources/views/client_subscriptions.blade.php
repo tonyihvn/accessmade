@@ -71,6 +71,11 @@
                                             <a href="{{ url('/item-payments/' . $sub->id) }}"
                                                 class="btn btn-info btn-xs">My-Payments</a>
                                         @endif
+                                        @if (auth()->user()->role == 'Super')
+
+                                            <a href="{{ url('/delete-subs/' . $sub->id) }}"
+                                                class="btn btn-danger btn-xs">Delete</a>
+                                        @endif
                                     </td>
 
                                 </tr>
